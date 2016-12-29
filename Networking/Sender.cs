@@ -7,16 +7,8 @@ namespace BISS.Networking
 	/// <summary>
 	/// Transmits a packet over the network.
 	/// </summary>
-	public class Sender
+	public class Sender : Socket
 	{
-		readonly IPEndPoint endpoint;
-
-		public Sender()
-		{
-			// FIXME: Determine Broadcast address of local subnet.
-			this.endpoint = new IPEndPoint(IPAddress.Parse("192.168.1.255"), 15000);
-		}
-
 		/// <summary>
 		/// Transmits the specified packet over the network.
 		/// </summary>
@@ -26,7 +18,7 @@ namespace BISS.Networking
 			if (packet == null)
 				throw new ArgumentNullException("packet");
 
-			using (UdpClient client = new UdpClient())
+			using (UdpClient client = CreateClient())
 			{
 				Send(client, packet);
 			}
@@ -44,7 +36,7 @@ namespace BISS.Networking
 
 			// Generate the raw byte data and send them
 			byte[] data = packet.GenerateDatagram();
-			client.Send(data, data.Length, this.endpoint);
+			client.Send(data, data.Length, this.EndPoint);
 		}
 	}
 }

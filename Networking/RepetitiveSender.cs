@@ -32,12 +32,25 @@ namespace BISS.Networking
 			}
 		}
 
-		public RepetitiveSender()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RepetitiveSender"/> class with the
+		/// specified repetitions and delay.
+		/// </summary>
+		/// <param name="repetitions">The number of repetitions.</param>
+		/// <param name="delay">The delay in seconds between the repetitions.</param>
+		public RepetitiveSender(uint repetitions, uint delay)
 		{
-			// Defaults
-			this.Repetitions = 9;
-			this.Delay = 1;
+			this.Repetitions = repetitions;
+			this.Delay = delay;
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RepetitiveSender"/> class. Nine repetitions
+		/// and a delay of one second is used.
+		/// </summary>
+		public RepetitiveSender()
+			: this(9, 1)
+		{ }
 
 		/// <summary>
 		/// Repetitively transmit the packet in <paramref name="packet"/>.
@@ -49,7 +62,7 @@ namespace BISS.Networking
 				throw new ArgumentNullException("packet");
 
 			// Generate a UDP client used for all transmisions.
-			using (UdpClient client = new UdpClient())
+			using (UdpClient client = CreateClient())
 			{
 				for (int a = 0; a < Transmissions; a++)
 				{

@@ -9,6 +9,28 @@
 		readonly ushort packetIdentifier;
 
 		/// <summary>
+		/// Gets the message type of this packet.
+		/// </summary>
+		public MessageType MessageType
+		{
+			get
+			{
+				return this.messageType;
+			}
+		}
+
+		/// <summary>
+		/// Gets the identifier of this packet.
+		/// </summary>
+		public ushort PacketIdentifier
+		{
+			get
+			{
+				return this.packetIdentifier;
+			}
+		}
+
+		/// <summary>
 		/// First byte of the packet
 		/// </summary>
 		const byte StartOfPacket = 0x02;	// STX;
@@ -28,6 +50,12 @@
 		/// </summary>
 		public const string Magic = "BISS";
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Packet"/> class with the specified
+		/// message type and packet identifier.
+		/// </summary>
+		/// <param name="messageType">Message type of this packet.</param>
+		/// <param name="packetIdentifier">Packet identifier of this packet.</param>
 		public Packet(MessageType messageType, ushort packetIdentifier)
 		{
 			this.messageType = messageType;
@@ -65,6 +93,41 @@
 			data[9] = EndOfPacket;
 
 			return data;
+		}
+
+		/// <summary>
+		/// Converts the raw data bytes into a packet.
+		/// </summary>
+		/// <param name="datagram">Raw bytes representing the packet.</param>
+		/// <returns>Instance of <see cref="Packet"/> or NULL if the conversion was unsuccessfull.</returns>
+		public static Packet Parse(byte[] datagram)
+		{
+			// Wrong length
+			if (datagram.Length != 10)
+				return null;
+
+			// Wrong start byte
+			if (datagram[0] != StartOfPacket)
+				return null;
+
+			// Wrong magic bytes
+			if (datagram[1] != (byte)Magic[0] || datagram[2] != (byte)Magic[1]
+				|| datagram[3] != (byte)Magic[2] || datagram[4] != (byte)Magic[3])
+				return null;
+
+			// Unsupported protocol version
+			if (datagram[5] != ProtocolVersion)
+				return null;
+
+			// Wrong end byte
+			if (datagram[9] != EndOfPacket)
+				return null;
+
+			MessageType messageType = (MessageType)datagram[8];
+			ushort packetIdentifier = (ushort)(datagram[6] << 8);
+			packetIdentifier += datagram[7];
+
+			return new Packet(messageType, packetIdentifier);
 		}
 	}
 }
