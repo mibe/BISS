@@ -6,6 +6,7 @@
 	public enum MessageType : uint
 	{
 		None = 0,
-		BakeryIsThere = 1
+		BakeryIsThere = 1,
+		DeliveryIsThere = 2
 	}
 }
