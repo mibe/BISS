@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BISS.Networking;
 
@@ -13,6 +14,8 @@ namespace BISS.Boss
 			InitializeComponent();
 
 			generateMessageTypes();
+
+			this.btnSend.Tag = this.btnSend.Text;
 		}
 
 		private void generateMessageTypes()
@@ -37,7 +40,9 @@ namespace BISS.Boss
 			Packet packet = PacketBuilder.Instance.Build(message);
 			s.Send(packet);
 
-			MessageBox.Show("Message transmitted", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			this.btnSend.Text = "Done!";
+
+			Task.Delay(5000).ContinueWith(x => this.btnSend.Text = this.btnSend.Tag as String);
 		}
 	}
 }
