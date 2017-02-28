@@ -33,7 +33,13 @@ namespace BISS.Networking
 		protected UdpClient CreateClient(bool bindPort = false)
 		{
 			if (bindPort)
-				return new UdpClient(Port);
+			{
+				UdpClient result = new UdpClient();
+				// Set ReuseAddress to support multiple receivers.
+				result.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+				result.Client.Bind(new IPEndPoint(IPAddress.Any, Port));
+				return result;
+			}
 			else
 				return new UdpClient();
 		}
