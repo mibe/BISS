@@ -35,7 +35,7 @@ namespace BISS.Networking
 		}
 
 		/// <summary>
-		/// Raises the <see cref="PacketReceived"/> event, but only if the packet in
+		/// Raises the <see cref="Receiver.PacketReceived"/> event, but only if the packet in
 		/// <paramref name="receivedPacket"/> was not already received before.
 		/// </summary>
 		/// <param name="receivedPacket">Packet which was received.</param>

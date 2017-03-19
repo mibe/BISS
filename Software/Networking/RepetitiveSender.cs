@@ -58,23 +58,32 @@ namespace BISS.Networking
 		/// </summary>
 		/// <param name="packet">Packet, which should be transmitted.</param>
 		/// <param name="ipAddress">IP address of the local endpoint.</param>
-		public override void Send(Packet packet, IPAddress ipAddress)
+		/// <returns>TRUE if all packets were successfully sent.</returns>
+		public override bool Send(Packet packet, IPAddress ipAddress)
 		{
 			if (packet == null)
 				throw new ArgumentNullException("packet");
+
+			bool result = true;
 
 			// Generate a UDP client used for all transmisions.
 			using (UdpClient client = CreateClient(ipAddress))
 			{
 				for (int a = 0; a < Transmissions; a++)
 				{
-					base.Send(client, packet);
+					bool tempResult = base.Send(client, packet);
+
+					// only set result to false when previous results were true
+					if (result)
+						result = tempResult;
 
 					// No delay after the last repetition.
 					if (a + 1 < Transmissions && Delay != 0)
 						System.Threading.Thread.Sleep((int)Delay * 1000);
 				}
 			}
+
+			return result;
 		}
 	}
 }

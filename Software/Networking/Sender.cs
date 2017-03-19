@@ -17,7 +17,8 @@ namespace BISS.Networking
 		/// </summary>
 		/// <param name="packet">Packet to be transmitted.</param>
 		/// <param name="ipAddress">IP address of the local endpoint.</param>
-		public virtual void Send(Packet packet, IPAddress ipAddress)
+		/// <returns>TRUE if the packet was successfully sent.</returns>
+		public virtual bool Send(Packet packet, IPAddress ipAddress)
 		{
 			if (packet == null)
 				throw new ArgumentNullException("packet");
@@ -25,14 +26,15 @@ namespace BISS.Networking
 				throw new ArgumentNullException("ipAddress");
 
 			if (!IsUsableIPAddress(ipAddress))
-				throw new ArgumentException("The specified IP address is not usable.", "ipAddress");
+				throw new ArgumentException(String.Format("The specified IP address ({0}) is not usable.", ipAddress),
+					"ipAddress");
 
 			using (UdpClient client = CreateClient(ipAddress))
 			{
 				client.EnableBroadcast = true;
 				client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
 
-				Send(client, packet);
+				return Send(client, packet);
 			}
 		}
 
@@ -41,14 +43,17 @@ namespace BISS.Networking
 		/// </summary>
 		/// <param name="client">UDP client used for transmitting.</param>
 		/// <param name="packet">Packet to be transmitted.</param>
-		protected void Send(UdpClient client, Packet packet)
+		/// <returns>TRUE if the packet was successfully sent.</returns>
+		protected bool Send(UdpClient client, Packet packet)
 		{
 			if (client == null)
 				throw new ArgumentNullException("client");
 
 			// Generate the raw byte data and send them
 			byte[] data = packet.GenerateDatagram();
-			client.Send(data, data.Length, this.BroadcastEndPoint);
+			int sent = client.Send(data, data.Length, this.BroadcastEndPoint);
+
+			return data.Length == sent;
 		}
 	}
 }
