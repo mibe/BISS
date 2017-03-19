@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BISS.Networking.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,10 +44,12 @@
     <Compile Include="PacketBuilder.cs" />
     <Compile Include="PacketReceivedEventArgs.cs" />
     <Compile Include="Receiver.cs" />
-    <Compile Include="RepetitiveSender.cs" />
+    <Compile Include="RepetitiveSender.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Socket.cs" />
+    <Compile Include="Base.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

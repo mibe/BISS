@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 namespace BISS.Networking
@@ -7,19 +10,28 @@ namespace BISS.Networking
 	/// <summary>
 	/// Transmits a packet over the network.
 	/// </summary>
-	public class Sender : Socket
+	public class Sender : Base
 	{
 		/// <summary>
 		/// Transmits the specified packet over the network.
 		/// </summary>
 		/// <param name="packet">Packet to be transmitted.</param>
-		public virtual void Send(Packet packet)
+		/// <param name="ipAddress">IP address of the local endpoint.</param>
+		public virtual void Send(Packet packet, IPAddress ipAddress)
 		{
 			if (packet == null)
 				throw new ArgumentNullException("packet");
+			if (ipAddress == null)
+				throw new ArgumentNullException("ipAddress");
 
-			using (UdpClient client = CreateClient())
+			if (!IsUsableIPAddress(ipAddress))
+				throw new ArgumentException("The specified IP address is not usable.", "ipAddress");
+
+			using (UdpClient client = CreateClient(ipAddress))
 			{
+				client.EnableBroadcast = true;
+				client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontRoute, 1);
+
 				Send(client, packet);
 			}
 		}
@@ -36,7 +48,7 @@ namespace BISS.Networking
 
 			// Generate the raw byte data and send them
 			byte[] data = packet.GenerateDatagram();
-			client.Send(data, data.Length, this.EndPoint);
+			client.Send(data, data.Length, this.BroadcastEndPoint);
 		}
 	}
 }

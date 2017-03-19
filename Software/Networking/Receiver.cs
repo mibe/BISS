@@ -6,7 +6,7 @@ namespace BISS.Networking
 	/// <summary>
 	/// Receives a packet.
 	/// </summary>
-	public class Receiver : Socket
+	public class Receiver : Base
 	{
 		readonly UdpClient client;
 		IAsyncResult asyncResult;
@@ -23,7 +23,7 @@ namespace BISS.Networking
 
 		public Receiver()
 		{
-			this.client = CreateClient(true);
+			this.client = CreateClient();
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace BISS.Networking
 
 		private void receive(IAsyncResult asyncResult)
 		{
-			byte[] datagram = this.client.EndReceive(asyncResult, ref this.EndPoint);
+			byte[] datagram = this.client.EndReceive(asyncResult, ref this.BroadcastEndPoint);
 
 			// Convert the received bytes into a packet
 			Packet receivedPacket = Packet.Parse(datagram);

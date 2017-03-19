@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace BISS.Networking
@@ -56,19 +57,20 @@ namespace BISS.Networking
 		/// Repetitively transmit the packet in <paramref name="packet"/>.
 		/// </summary>
 		/// <param name="packet">Packet, which should be transmitted.</param>
-		public override void Send(Packet packet)
+		/// <param name="ipAddress">IP address of the local endpoint.</param>
+		public override void Send(Packet packet, IPAddress ipAddress)
 		{
 			if (packet == null)
 				throw new ArgumentNullException("packet");
 
 			// Generate a UDP client used for all transmisions.
-			using (UdpClient client = CreateClient())
+			using (UdpClient client = CreateClient(ipAddress))
 			{
 				for (int a = 0; a < Transmissions; a++)
 				{
 					base.Send(client, packet);
 
-					// No delay on the last repetition.
+					// No delay after the last repetition.
 					if (a + 1 < Transmissions && Delay != 0)
 						System.Threading.Thread.Sleep((int)Delay * 1000);
 				}
