@@ -1,3 +1,13 @@
 *.suo
 obj
 bin
+*.d
+*.o
+*.bin
+*.eep
+*.user
+*.elf
+*.hex
+*.lss
+*.map
+*.sym
