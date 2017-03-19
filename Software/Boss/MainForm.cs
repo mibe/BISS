@@ -36,7 +36,7 @@ namespace BISS.Boss
 				return;
 
 			MessageType message = (MessageType)Enum.Parse(typeof(MessageType), item);
-			Sender s = new Sender();
+			InterfaceSender s = new InterfaceSender();
 			Packet packet = PacketBuilder.Instance.Build(message);
 			s.Send(packet);
 
