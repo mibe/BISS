@@ -44,7 +44,6 @@ int main(void)
 {
 	SetupHardware();
 
-	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 	GlobalInterruptEnable();
 
 	for (;;)
@@ -57,46 +56,15 @@ int main(void)
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
 void SetupHardware(void)
 {
-#if (ARCH == ARCH_AVR8)
 	/* Disable watchdog if enabled by bootloader/fuses */
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
 
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
-#elif (ARCH == ARCH_XMEGA)
-	/* Start the PLL to multiply the 2MHz RC oscillator to 32MHz and switch the CPU core to run from it */
-	XMEGACLK_StartPLL(CLOCK_SRC_INT_RC2MHZ, 2000000, F_CPU);
-	XMEGACLK_SetCPUClockSource(CLOCK_SRC_PLL);
-
-	/* Start the 32MHz internal RC oscillator and start the DFLL to increase it to 48MHz using the USB SOF as a reference */
-	XMEGACLK_StartInternalOscillator(CLOCK_SRC_INT_RC32MHZ);
-	XMEGACLK_StartDFLL(CLOCK_SRC_INT_RC32MHZ, DFLL_REF_INT_USBSOF, F_USB);
-
-	PMIC.CTRL = PMIC_LOLVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_HILVLEN_bm;
-#endif
 
 	/* Hardware Initialization */
-	LEDs_Init();
 	USB_Init();
-}
-
-/** Event handler for the USB_Connect event. This indicates that the device is enumerating via the status LEDs and
- *  starts the library USB task to begin the enumeration and USB management process.
- */
-void EVENT_USB_Device_Connect(void)
-{
-	/* Indicate USB enumerating */
-	LEDs_SetAllLEDs(LEDMASK_USB_ENUMERATING);
-}
-
-/** Event handler for the USB_Disconnect event. This indicates that the device is no longer connected to a host via
- *  the status LEDs and stops the USB management task.
- */
-void EVENT_USB_Device_Disconnect(void)
-{
-	/* Indicate USB not ready */
-	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host sets the current configuration
@@ -104,14 +72,9 @@ void EVENT_USB_Device_Disconnect(void)
  */
 void EVENT_USB_Device_ConfigurationChanged(void)
 {
-	bool ConfigSuccess = true;
-
 	/* Setup HID Report Endpoints */
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(GENERIC_IN_EPADDR, EP_TYPE_INTERRUPT, GENERIC_EPSIZE, 1);
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(GENERIC_OUT_EPADDR, EP_TYPE_INTERRUPT, GENERIC_EPSIZE, 1);
-
-	/* Indicate endpoint configuration success or failure */
-	LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
+	Endpoint_ConfigureEndpoint(GENERIC_IN_EPADDR, EP_TYPE_INTERRUPT, GENERIC_EPSIZE, 1);
+	Endpoint_ConfigureEndpoint(GENERIC_OUT_EPADDR, EP_TYPE_INTERRUPT, GENERIC_EPSIZE, 1);
 }
 
 /** Event handler for the USB_ControlRequest event. This is used to catch and process control requests sent to
@@ -167,21 +130,6 @@ void ProcessGenericHIDReport(uint8_t* DataArray)
 		holding the report sent from the host.
 	*/
 
-	uint8_t NewLEDMask = LEDS_NO_LEDS;
-
-	if (DataArray[0])
-	  NewLEDMask |= LEDS_LED1;
-
-	if (DataArray[1])
-	  NewLEDMask |= LEDS_LED2;
-
-	if (DataArray[2])
-	  NewLEDMask |= LEDS_LED3;
-
-	if (DataArray[3])
-	  NewLEDMask |= LEDS_LED4;
-
-	LEDs_SetAllLEDs(NewLEDMask);
 }
 
 /** Function to create the next report to send back to the host at the next reporting interval.
@@ -195,13 +143,6 @@ void CreateGenericHIDReport(uint8_t* DataArray)
 		function is called each time the host is ready to accept a new report. DataArray is
 		an array to hold the report to the host.
 	*/
-
-	uint8_t CurrLEDMask = LEDs_GetLEDs();
-
-	DataArray[0] = ((CurrLEDMask & LEDS_LED1) ? 1 : 0);
-	DataArray[1] = ((CurrLEDMask & LEDS_LED2) ? 1 : 0);
-	DataArray[2] = ((CurrLEDMask & LEDS_LED3) ? 1 : 0);
-	DataArray[3] = ((CurrLEDMask & LEDS_LED4) ? 1 : 0);
 }
 
 void HID_Task(void)
