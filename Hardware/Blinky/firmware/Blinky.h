@@ -30,7 +30,7 @@
 
 /** \file
  *
- *  Header file for GenericHID.c.
+ *  Header file for Blinky.c.
  */
 
 #ifndef _BLINKY_H_
@@ -49,6 +49,8 @@
 
 		#include <LUFA/Drivers/USB/USB.h>
 		#include <LUFA/Platform/Platform.h>
+
+		#include "Display.h"
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
