@@ -33,8 +33,8 @@
  *  Header file for GenericHID.c.
  */
 
-#ifndef _GENERICHID_H_
-#define _GENERICHID_H_
+#ifndef _BLINKY_H_
+#define _BLINKY_H_
 
 	/* Includes: */
 		#include <avr/io.h>

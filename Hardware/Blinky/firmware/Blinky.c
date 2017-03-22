@@ -28,13 +28,7 @@
   this software.
 */
 
-/** \file
- *
- *  Main source file for the GenericHID demo. This file contains the main tasks of the demo and
- *  is responsible for the initial application hardware configuration.
- */
-
-#include "GenericHID.h"
+#include "Blinky.h"
 
 
 /** Main program entry point. This routine configures the hardware required by the application, then
