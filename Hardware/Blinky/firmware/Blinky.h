@@ -51,6 +51,7 @@
 		#include <LUFA/Platform/Platform.h>
 
 		#include "Display.h"
+		#include "Settings.h"
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
