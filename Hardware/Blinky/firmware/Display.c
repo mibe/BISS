@@ -57,6 +57,6 @@ void Display_Enable(void)
 void Display_Disable(void)
 {
 	// Disable all outputs
-	DDRC &= ~_BV(PC6) & ~_BV(PC5) & ~_BV(PB7);
+	DDRC &= ~_BV(PC6) & ~_BV(PC5);
+	DDRB &= ~_BV(PB7);
 }
-
