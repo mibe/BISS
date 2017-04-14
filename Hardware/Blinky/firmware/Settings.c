@@ -11,7 +11,7 @@ Settings_t Settings_Load(void)
 	{
 		// Looks like an uninitialized EEPROM. So we're using defaults here.
 		temp.Color = (struct Display_Color_t) {0, 0, 0};
-		temp.Frequency = 1;
+		temp.BlinkInterval = 1;
 	}
 	
 	return temp;

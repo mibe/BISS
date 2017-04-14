@@ -15,7 +15,7 @@ typedef struct
 	uint8_t Header;			// 0x01			'B' (0x42)
 	uint8_t Version;		// 0x02			memory layout version, zero-based.
 	Display_Color_t Color;	// 0x03 - 0x05	LED color
-	uint8_t Frequency;		// 0x06			blink frequency
+	uint8_t BlinkInterval;	// 0x06			blink interval
 } Settings_t;
 
 Settings_t Settings_Load(void);
