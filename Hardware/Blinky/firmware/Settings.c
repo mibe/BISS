@@ -10,8 +10,8 @@ Settings_t Settings_Load(void)
 	if ((temp.Header != SETTINGS_HEADER) || (temp.Version != SETTINGS_VERSION))
 	{
 		// Looks like an uninitialized EEPROM. So we're using defaults here.
-		temp.Color = (struct Display_Color_t) {0, 0, 0};
-		temp.BlinkInterval = 1;
+		temp.Color = (struct Display_Color_t) SETTINGS_DEFAULT_COLOR;
+		temp.BlinkInterval = SETTINGS_DEFAULT_INTERVAL;
 	}
 	
 	return temp;

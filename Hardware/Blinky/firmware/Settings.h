@@ -9,6 +9,9 @@
 #define SETTINGS_HEADER 0x42	// 'B'
 #define SETTINGS_VERSION 0x00
 
+#define SETTINGS_DEFAULT_COLOR {0, 0, 0}
+#define SETTINGS_DEFAULT_INTERVAL 1
+
 typedef struct
 {
 	uint8_t Reserved;		// 0x00			reserved (EEPROM corruption)
