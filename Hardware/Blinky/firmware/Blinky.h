@@ -52,6 +52,7 @@
 
 		#include "Display.h"
 		#include "Settings.h"
+		#include "Blinker.h"
 
 	/* Function Prototypes: */
 		void SetupHardware(void);

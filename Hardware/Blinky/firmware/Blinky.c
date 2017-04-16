@@ -67,6 +67,8 @@ void SetupHardware(void)
 	Display_Setup();
 	Display_Disable();
 	Display_SetValue(settings.Color);
+	// Init blinker timer.
+	Blinker_SetInterval(settings.BlinkInterval);
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host sets the current configuration
