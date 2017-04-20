@@ -1,7 +1,5 @@
 #include "Blinker.h"
 
-volatile static uint8_t counter;
-
 void Blinker_Enable(void)
 {
 	// Normal mode, with prescaler of 1024; overflow interrupt enabled
@@ -17,6 +15,8 @@ void Blinker_Disable(void)
 
 ISR(TIMER0_OVF_vect)
 {
+	static uint8_t counter = 0;
+	
 	// Overflow of Timer0 happened. Increment our internal counter.
 	counter++;
 	
