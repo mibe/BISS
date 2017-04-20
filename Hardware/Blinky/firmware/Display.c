@@ -9,36 +9,25 @@ void Display_Setup(void)
 	// Fast PWM, 8-bit, clear on match, set on top, with prescaler of 1024
 	TCCR1A |= _BV(COM1A1) | _BV(COM1B1) | _BV(COM1C1) | _BV(WGM10);
 	TCCR1B |= _BV(WGM12) | _BV(CS12) | _BV(CS10);
-	
-	Display_Color_t zero = {0, 0, 0};
-	Display_SetValue(zero);
+
+	Display_Update();
 }
 
-void Display_SetValue(Display_Color_t color)
+void Display_Update()
 {
-	OCR1A = color.R;
-	OCR1B = color.G;
-	OCR1C = color.B;
+	OCR1A = settings.Color.R;
+	OCR1B = settings.Color.G;
+	OCR1C = settings.Color.B;
 	
 	// Disable the outputs if no PWM is required.
-	if (color.R == 0)
+	if (settings.Color.R == 0)
 		DDRC &= ~_BV(PC6);
 	
-	if (color.G == 0)
+	if (settings.Color.G == 0)
 		DDRC &= ~_BV(PC5);
 	
-	if (color.B == 0)
+	if (settings.Color.B == 0)
 		DDRB &= ~_BV(PB7);
-}
-
-Display_Color_t Display_GetValue(void)
-{
-	Display_Color_t result;
-	result.R = OCR1A;
-	result.G = OCR1B;
-	result.B = OCR1C;
-	
-	return result;
 }
 
 void Display_Enable(void)

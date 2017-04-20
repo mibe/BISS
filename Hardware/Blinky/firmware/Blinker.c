@@ -1,12 +1,6 @@
 #include "Blinker.h"
 
-volatile static uint8_t setPoint;
 volatile static uint8_t counter;
-
-void Blinker_SetInterval(uint8_t interval)
-{
-	setPoint = interval;
-}
 
 void Blinker_Enable(void)
 {
@@ -27,7 +21,7 @@ ISR(TIMER0_OVF_vect)
 	counter++;
 	
 	// If the setpoint is reached, toggle the display.
-	if (counter >= setPoint)
+	if (counter >= settings.BlinkInterval)
 	{
 		// Bit 0 of GPIO register 0 is used as a status bit.
 		if (~BLINKER_STATR & BLINKER_STATB)

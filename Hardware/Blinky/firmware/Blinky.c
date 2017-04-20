@@ -30,8 +30,6 @@
 
 #include "Blinky.h"
 
-static Settings_t settings;
-
 /** Main program entry point. This routine configures the hardware required by the application, then
  *  enters a loop to run the application tasks in sequence.
  */
@@ -62,13 +60,10 @@ void SetupHardware(void)
 	USB_Init();
 	
 	// Load settings from EEPROM.
-	settings = Settings_Load();
+	Settings_Load();
 	// Init display driver.
 	Display_Setup();
 	Display_Disable();
-	Display_SetValue(settings.Color);
-	// Init blinker timer.
-	Blinker_SetInterval(settings.BlinkInterval);
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host sets the current configuration

@@ -5,11 +5,11 @@
 #include <avr/interrupt.h>
 
 #include "Display.h"
+#include "Settings.h"
 
 #define BLINKER_STATR GPIOR0		// GPIO register for display status
 #define BLINKER_STATB 1				// Bit for that in that GPIO register
 
-void Blinker_SetInterval(uint8_t interval);
 void Blinker_Enable(void);
 void Blinker_Disable(void);
 
