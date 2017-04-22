@@ -7,8 +7,8 @@
 #define SETTINGS_HEADER 0x42	// 'B'
 #define SETTINGS_VERSION 0x00
 
-#define SETTINGS_DEFAULT_COLOR {0, 0, 0}
-#define SETTINGS_DEFAULT_INTERVAL 1
+#define SETTINGS_DEFAULT_COLOR {10, 10, 10}
+#define SETTINGS_DEFAULT_INTERVAL 31
 
 typedef struct __attribute__((__packed__))
 {
