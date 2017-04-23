@@ -22,13 +22,22 @@ typedef struct
 	uint8_t Reserved;		// 0x00			reserved (EEPROM corruption)
 	uint8_t Header;			// 0x01			'B' (0x42)
 	uint8_t Version;		// 0x02			memory layout version, zero-based.
-	Color_t Color;	// 0x03 - 0x05	LED color
+	Color_t Color;			// 0x03 - 0x05	LED color
 	uint8_t BlinkInterval;	// 0x06			blink interval
 } Settings_t;
+
+enum SettingsState_t
+{
+	SETTINGS_STATE_Empty = 0,			// EEPROM is empty / uninitialized
+	SETTINGS_STATE_Defaults = 1,		// EEPROM contains default settings
+	SETTINGS_STATE_NonDefaults = 2		// EEPROM contains non-default settings
+};
 
 Settings_t settings;
 
 void Settings_Load(void);
 void Settings_Save(void);
+uint8_t Settings_State(void);
+void Settings_Clear(void);
 
 #endif
