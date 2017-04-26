@@ -18,6 +18,14 @@ static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkIn
 	settings.BlinkInterval = blinkInterval;
 }
 
+static void Command_GetSettings(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* blinkInterval)
+{
+	*r = settings.Color.R;
+	*g = settings.Color.G;
+	*b = settings.Color.B;
+	*blinkInterval = settings.BlinkInterval;
+}
+
 static void Command_SaveSettings(void)
 {
 	// Disable the blinker after saving, too.
@@ -34,7 +42,16 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 {
 	// The command ID is always the first byte of the package.
 	uint8_t cmdId = fromHost[0];
+	
+	// Clear array; this notation had the least memory impact.
 	toHost[0] = cmdId;
+	toHost[1] = 0;
+	toHost[2] = 0;
+	toHost[3] = 0;
+	toHost[4] = 0;
+	toHost[5] = 0;
+	toHost[6] = 0;
+	toHost[7] = 0;
 	
 	switch(cmdId)
 	{
@@ -44,11 +61,15 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 		case CMD_SetSettings:
 			Command_SetSettings(fromHost[1], fromHost[2], fromHost[3], fromHost[4]);
 			break;
+		case CMD_GetSettings:
+			Command_GetSettings(&toHost[1], &toHost[2], &toHost[3], &toHost[4]);
+			break;
 		case CMD_SaveSettings:
 			Command_SaveSettings();
 			break;
 		case CMD_ResetSettings:
 			Command_ResetSettings();
+			break;
 		default:
 			return 1;
 	}
