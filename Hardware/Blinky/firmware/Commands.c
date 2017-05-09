@@ -38,6 +38,11 @@ static void Command_ResetSettings(void)
 	Settings_Clear();
 }
 
+static void Command_Bootloader(void)
+{
+	Bootloader_Execute();
+}
+
 uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 {
 	// The command ID is always the first byte of the package.
@@ -70,6 +75,8 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 		case CMD_ResetSettings:
 			Command_ResetSettings();
 			break;
+		case CMD_Bootloader:
+			Command_Bootloader();
 		default:
 			return 1;
 	}

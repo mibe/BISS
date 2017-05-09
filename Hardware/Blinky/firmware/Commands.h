@@ -4,6 +4,7 @@
 #import "Settings.h"
 #import "Display.h"
 #import "Blinker.h"
+#import "Bootloader.h"
 
 #define CMD_Trigger 1
 #define CMD_SetSettings 2

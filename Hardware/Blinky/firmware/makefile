@@ -16,11 +16,15 @@ ARCH         = AVR8
 BOARD        = NONE
 F_CPU        = 16000000
 F_USB        = $(F_CPU)
+# Sizes are in bytes, not words!
+# ATmega32U2 has 32 KiB of flash; bootloader takes 4 KiB
+FLASH_SIZE   = 0x8000
+BL_SEC_SIZE  = 0x1000
 OPTIMIZATION = s
 TARGET       = Blinky
-SRC          = $(TARGET).c Commands.c Blinker.c Settings.c Display.c Descriptors.c $(LUFA_SRC_USB)
+SRC          = $(TARGET).c Bootloader.c Commands.c Blinker.c Settings.c Display.c Descriptors.c $(LUFA_SRC_USB)
 LUFA_PATH    = ../LUFA/LUFA
-CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
+CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/ -DFLASH_SIZE_BYTES=$(FLASH_SIZE) -DBOOTLOADER_SEC_SIZE_BYTES=$(BL_SEC_SIZE)
 LD_FLAGS     =
 
 # Default target

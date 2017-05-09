@@ -54,6 +54,7 @@
 		#include "Settings.h"
 		#include "Blinker.h"
 		#include "Commands.h"
+		#include "Bootloader.h"
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
