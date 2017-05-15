@@ -9,6 +9,7 @@
 
 #define BLINKER_STATR GPIOR0		// GPIO register for display status
 #define BLINKER_STATB 1				// Bit for that in that GPIO register
+#define BLINKER_TOUCH PCINT5		// Pin for pin change interrupt wired to the touch sensor
 
 void Blinker_Enable(void);
 void Blinker_Disable(void);
