@@ -1,8 +1,8 @@
 #include "Commands.h"
 
-static void Command_Trigger(void)
+static void Command_Trigger(uint8_t enableTouchSensor)
 {
-	Blinker_Enable();
+	Blinker_Enable(enableTouchSensor);
 }
 
 static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkInterval)
@@ -61,7 +61,7 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 	switch(cmdId)
 	{
 		case CMD_Trigger:
-			Command_Trigger();
+			Command_Trigger(fromHost[1]);
 			break;
 		case CMD_SetSettings:
 			Command_SetSettings(fromHost[1], fromHost[2], fromHost[3], fromHost[4]);

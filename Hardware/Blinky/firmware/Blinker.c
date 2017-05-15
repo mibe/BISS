@@ -1,14 +1,17 @@
 #include "Blinker.h"
 
-void Blinker_Enable(void)
+void Blinker_Enable(uint8_t enableTouchSensor)
 {
 	// Normal mode, with prescaler of 1024; overflow interrupt enabled
 	TCCR0B |= _BV(CS02) | _BV(CS00);
 	TIMSK0 |= _BV(TOIE0);
 	
 	// Watch for changes on the touch sensor input pin
-	PCICR |= _BV(PCIE0);
-	PCMSK0 |= _BV(BLINKER_TOUCH);
+	if (enableTouchSensor)
+	{
+		PCICR |= _BV(PCIE0);
+		PCMSK0 |= _BV(BLINKER_TOUCH);
+	}
 }
 
 void Blinker_Disable(void)
