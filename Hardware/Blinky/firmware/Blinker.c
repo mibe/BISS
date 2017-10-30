@@ -8,18 +8,17 @@ void Blinker_Enable(uint8_t enableTouchSensor)
 	
 	// Watch for changes on the touch sensor input pin
 	if (enableTouchSensor)
-	{
-		PCICR |= _BV(PCIE0);
-		PCMSK0 |= _BV(BLINKER_TOUCH);
-	}
+		BLINKER_STATR |= BLINKER_TOUCHB;
 }
 
 void Blinker_Disable(void)
 {
-	// stop timer by setting no clock source & disable pin change interrupt
+	// Stop timer by setting no clock source
 	TCCR0B &= ~_BV(CS02) & ~_BV(CS00);
-	PCICR = 0;
+	
+	// Disable the display and reset touch sensor enabled bit.
 	Display_Disable();
+	BLINKER_STATR &= ~BLINKER_TOUCHB;
 }
 
 ISR(TIMER0_OVF_vect)
@@ -32,7 +31,8 @@ ISR(TIMER0_OVF_vect)
 	// If the setpoint is reached, toggle the display.
 	if (counter >= settings.BlinkInterval)
 	{
-		// Bit 0 of GPIO register 0 is used as a status bit.
+		// Bit 0 of GPIO register 0 is used as a status bit to check whether
+		// the display is enabled or not.
 		if (~BLINKER_STATR & BLINKER_STATB)
 		{
 			Display_Enable();
@@ -48,9 +48,10 @@ ISR(TIMER0_OVF_vect)
 		// This makes it practically a timer in CTC mode with a larger prescaler.
 		counter = 0;
 	}
-}
-
-ISR(PCINT0_vect)
-{
-	Blinker_Disable();
+	
+	// Check if the touch sensor is enabled and if yes, check if it sensed a touch.
+	// (The output from the sensor is low-active.)
+	if (BLINKER_STATR & BLINKER_TOUCHB)
+		if (!(PINB & _BV(BLINKER_TOUCH)))
+			Blinker_Disable();
 }

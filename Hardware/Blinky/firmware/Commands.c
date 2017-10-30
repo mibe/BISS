@@ -77,9 +77,10 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 			break;
 		case CMD_Bootloader:
 			Command_Bootloader();
+			break;
 		default:
 			return 1;
 	}
-				
+	
 	return 0;
 }
