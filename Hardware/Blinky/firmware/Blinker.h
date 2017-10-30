@@ -8,8 +8,8 @@
 #include "Settings.h"
 
 #define BLINKER_STATR GPIOR0		// GPIO register for blinker status
-#define BLINKER_STATB 1				// Bit for Display enabled
-#define BLINKER_TOUCHB 2			// Bit for touch sensor enabled
+#define BLINKER_STAT_DISPLAY 1		// Bit for Display enabled
+#define BLINKER_STAT_TOUCH 2		// Bit for touch sensor enabled
 #define BLINKER_TOUCH PB5			// Pin wired to the touch sensor output
 
 void Blinker_Enable(uint8_t enableTouchSensor);
