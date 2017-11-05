@@ -5,7 +5,7 @@ static void Command_Trigger(uint8_t enableTouchSensor)
 	Blinker_Enable(enableTouchSensor);
 }
 
-static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkInterval)
+static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkInterval, uint8_t blinkTimeout)
 {
 	if (settings.Color.R != r || settings.Color.G != g || settings.Color.B != b)
 	{
@@ -16,14 +16,16 @@ static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkIn
 	}
 	
 	settings.BlinkInterval = blinkInterval;
+	settings.BlinkTimeout = blinkTimeout;
 }
 
-static void Command_GetSettings(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* blinkInterval)
+static void Command_GetSettings(uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* blinkInterval, uint8_t* blinkTimeout)
 {
 	*r = settings.Color.R;
 	*g = settings.Color.G;
 	*b = settings.Color.B;
 	*blinkInterval = settings.BlinkInterval;
+	*blinkTimeout = settings.BlinkTimeout;
 }
 
 static void Command_SaveSettings(void)
@@ -64,10 +66,10 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 			Command_Trigger(fromHost[1]);
 			break;
 		case CMD_SetSettings:
-			Command_SetSettings(fromHost[1], fromHost[2], fromHost[3], fromHost[4]);
+			Command_SetSettings(fromHost[1], fromHost[2], fromHost[3], fromHost[4], fromHost[5]);
 			break;
 		case CMD_GetSettings:
-			Command_GetSettings(&toHost[1], &toHost[2], &toHost[3], &toHost[4]);
+			Command_GetSettings(&toHost[1], &toHost[2], &toHost[3], &toHost[4], &toHost[5]);
 			break;
 		case CMD_SaveSettings:
 			Command_SaveSettings();

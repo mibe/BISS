@@ -1,6 +1,6 @@
 #include "Settings.h"
 
-static Settings_t EEMEM s_settings = {0, SETTINGS_HEADER, SETTINGS_VERSION, {0, 0, 0}, 0};
+static Settings_t EEMEM s_settings = {0, SETTINGS_HEADER, SETTINGS_VERSION, {0, 0, 0}, 0, 0};
 
 void Settings_Load(void)
 {
@@ -28,7 +28,8 @@ uint8_t Settings_State(void)
 		return SETTINGS_STATE_Empty;
 	
 	if (settings.Color == (struct Color_t) SETTINGS_DEFAULT_COLOR
-		&& settings.BlinkInterval == SETTINGS_DEFAULT_INTERVAL)
+		&& settings.BlinkInterval == SETTINGS_DEFAULT_INTERVAL
+		&& settings.BlinkTimeout == SETTINGS_DEFAULT_TIMEOUT)
 		return SETTINGS_STATE_Defaults;
 	
 	return SETTINGS_STATE_NonDefaults;
@@ -38,4 +39,5 @@ void Settings_Clear(void)
 {
 	settings.Color = (struct Color_t) SETTINGS_DEFAULT_COLOR;
 	settings.BlinkInterval = SETTINGS_DEFAULT_INTERVAL;
+	settings.BlinkTimeout = SETTINGS_DEFAULT_TIMEOUT;
 }

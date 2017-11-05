@@ -9,6 +9,7 @@
 
 #define SETTINGS_DEFAULT_COLOR {10, 10, 10}
 #define SETTINGS_DEFAULT_INTERVAL 31
+#define SETTINGS_DEFAULT_TIMEOUT 76
 
 typedef struct __attribute__((__packed__))
 {
@@ -24,6 +25,7 @@ typedef struct
 	uint8_t Version;		// 0x02			memory layout version, zero-based.
 	Color_t Color;			// 0x03 - 0x05	LED color
 	uint8_t BlinkInterval;	// 0x06			blink interval
+	uint8_t BlinkTimeout;	// 0x07			blinker timeout
 } Settings_t;
 
 enum SettingsState_t
