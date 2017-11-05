@@ -78,53 +78,6 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 	Endpoint_ConfigureEndpoint(GENERIC_OUT_EPADDR, EP_TYPE_INTERRUPT, GENERIC_EPSIZE, 1);
 }
 
-/** Event handler for the USB_ControlRequest event. This is used to catch and process control requests sent to
- *  the device from the USB host before passing along unhandled control requests to the library for processing
- *  internally.
- */
-void EVENT_USB_Device_ControlRequest(void)
-{
-	/* Handle HID Class specific requests */
-	switch (USB_ControlRequest.bRequest)
-	{
-		case HID_REQ_GetReport:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
-
-				/* Write the report data to the control endpoint */
-				Endpoint_Write_Control_Stream_LE(&reportToHost, sizeof(reportToHost));
-				Endpoint_ClearOUT();
-			}
-
-			break;
-		case HID_REQ_SetReport:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				uint8_t GenericData[GENERIC_REPORT_SIZE];
-
-				Endpoint_ClearSETUP();
-
-				/* Read the report data from the control endpoint */
-				Endpoint_Read_Control_Stream_LE(&GenericData, sizeof(GenericData));
-				Endpoint_ClearIN();
-
-				ProcessGenericHIDReport(GenericData);
-			}
-
-			break;
-	}
-}
-
-/** Function to process the last received report from the host.
- *
- *  \param[in] DataArray  Pointer to a buffer where the last received report has been stored
- */
-void ProcessGenericHIDReport(uint8_t* DataArray)
-{
-	Command_Handle(DataArray, reportToHost);
-}
-
 void HID_Task(void)
 {
 	/* Device must be connected and configured for the task to run */
@@ -146,7 +99,7 @@ void HID_Task(void)
 			Endpoint_Read_Stream_LE(&GenericData, sizeof(GenericData), NULL);
 
 			/* Process Generic Report Data */
-			ProcessGenericHIDReport(GenericData);
+			Command_Handle(GenericData, reportToHost);
 		}
 
 		/* Finalize the stream transfer to send the last packet */
