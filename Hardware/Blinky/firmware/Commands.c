@@ -1,8 +1,8 @@
 #include "Commands.h"
 
-static void Command_Trigger(uint8_t enableTouchSensor)
+static void Command_Trigger(uint8_t blinkerSettings)
 {
-	Blinker_Enable(enableTouchSensor);
+	Blinker_Enable(blinkerSettings);
 }
 
 static void Command_SetSettings(uint8_t r, uint8_t g, uint8_t b, uint8_t blinkInterval, uint8_t blinkTimeout)

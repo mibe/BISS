@@ -16,7 +16,7 @@ static void _display_disable(void)
 	BLINKER_STATR &= ~(BLINKER_STAT_DISPLAY);
 }
 
-void Blinker_Enable(uint8_t enableTouchSensor)
+void Blinker_Enable(uint8_t blinkerSettings)
 {
 	blinkCounter = 0;
 	ovrflwToSec = 0;
@@ -27,8 +27,11 @@ void Blinker_Enable(uint8_t enableTouchSensor)
 	TIMSK0 |= _BV(TOIE0);
 	
 	// Watch for changes on the touch sensor input pin
-	if (enableTouchSensor)
+	if (blinkerSettings & BLINKER_ENABLE_TOUCH)
 		BLINKER_STATR |= BLINKER_STAT_TOUCH;
+	// Enable blinker timeout
+	if (blinkerSettings & BLINKER_ENABLE_TIMEOUT)
+		BLINKER_STATR |= BLINKER_STAT_TIMEOUT;
 	
 	 _display_enable();
 }
@@ -38,9 +41,10 @@ void Blinker_Disable(void)
 	// Stop timer by setting no clock source
 	TCCR0B &= ~_BV(CS02) & ~_BV(CS00);
 	
-	// Disable the display and reset touch sensor enabled bit.
+	// Disable the display and reset status bits.
 	_display_disable();
 	BLINKER_STATR &= ~BLINKER_STAT_TOUCH;
+	BLINKER_STATR &= ~BLINKER_STAT_TIMEOUT;
 }
 
 ISR(TIMER0_OVF_vect)
@@ -51,7 +55,8 @@ ISR(TIMER0_OVF_vect)
 	// Timeout logic: 16.000.000 MHz F_CPU with a timer prescaler of 1024 and
 	// an overflow of an 8 bit timer results in 61.03 interrupts per second.
 	// The error of 0.0351... can be neglected here.
-	if (++ovrflwToSec == 61)
+	// But timeout only if the bit in the status register is set.
+	if ((BLINKER_STATR & BLINKER_STAT_TIMEOUT) && ++ovrflwToSec == 61)
 	{
 		// Increment the seconds counter and reset the overflow counter.
 		secondsCounter++;
