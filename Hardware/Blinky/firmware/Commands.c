@@ -58,7 +58,6 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 	toHost[4] = 0;
 	toHost[5] = 0;
 	toHost[6] = 0;
-	toHost[7] = 0;
 	
 	switch(cmdId)
 	{
@@ -83,6 +82,9 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 		default:
 			return 1;
 	}
+	
+	// Pass the sync byte received back to the host.
+	toHost[7] = fromHost[7];
 	
 	return 0;
 }
