@@ -16,6 +16,14 @@ static void _display_disable(void)
 	BLINKER_STATR &= ~(BLINKER_STAT_DISPLAY);
 }
 
+void Blinker_Setup(void)
+{
+	// Set BLINKER_TOUCH as input; BLINKER_AUX as output
+	DDRB &= ~(_BV(BLINKER_TOUCH));
+	DDRB |= _BV(BLINKER_AUX);
+	PORTB &= ~(_BV(BLINKER_AUX));
+}
+
 void Blinker_Enable(uint8_t blinkerSettings)
 {
 	blinkCounter = 0;
@@ -34,6 +42,9 @@ void Blinker_Enable(uint8_t blinkerSettings)
 		BLINKER_STATR |= BLINKER_STAT_TIMEOUT;
 	
 	 _display_enable();
+	 
+	 // Set AUX output to high
+	 PORTB |= _BV(BLINKER_AUX);
 }
 
 void Blinker_Disable(void)
@@ -45,6 +56,9 @@ void Blinker_Disable(void)
 	_display_disable();
 	BLINKER_STATR &= ~BLINKER_STAT_TOUCH;
 	BLINKER_STATR &= ~BLINKER_STAT_TIMEOUT;
+	
+	// Set AUX output to low
+	PORTB &= ~(_BV(BLINKER_AUX));
 }
 
 ISR(TIMER0_OVF_vect)

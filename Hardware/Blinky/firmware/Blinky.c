@@ -66,6 +66,7 @@ void SetupHardware(void)
 	// Init display driver.
 	Display_Setup();
 	Display_Disable();
+	Blinker_Setup();
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host sets the current configuration
