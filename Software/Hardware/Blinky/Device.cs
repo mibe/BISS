@@ -60,6 +60,9 @@ namespace BISS.Hardware.Blinky
 			}
 		}
 
+		public UInt32 Timeout
+		{ get; set; }
+
 		event EventHandler Removed;
 
 		public Device() => this.random = new Random();
@@ -94,7 +97,7 @@ namespace BISS.Hardware.Blinky
 				report.Data[a + 1] = args[a];
 			report.Data[7] = syncByte;
 
-			return this.hidDevice.WriteReport(report);
+			return this.hidDevice.WriteReport(report, (int)Timeout);
 		}
 
 		private byte[] sendAndReceiveReport(Command cmd, params byte[] args)
@@ -106,7 +109,7 @@ namespace BISS.Hardware.Blinky
 
 			do
 			{
-				receivedReport = this.hidDevice.ReadReport();
+				receivedReport = this.hidDevice.ReadReport((int)Timeout);
 			} while (receivedReport.Data[7] != lastSyncByte);
 
 			byte[] result = new byte[maxArgCount];
