@@ -11,3 +11,4 @@ bin
 *.lss
 *.map
 *.sym
+.vs
