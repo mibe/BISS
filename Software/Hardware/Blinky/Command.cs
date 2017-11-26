@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BISS.Hardware.Blinky
+﻿namespace BISS.Hardware.Blinky
 {
 	internal enum Command : byte
 	{
@@ -14,6 +8,7 @@ namespace BISS.Hardware.Blinky
 		GetSettings = 3,
 		SaveSettings = 4,
 		ResetSettings = 5,
-		Bootloader = 6
+		Bootloader = 6,
+		TurnOff = 7
 	}
 }

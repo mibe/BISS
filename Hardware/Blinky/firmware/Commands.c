@@ -45,6 +45,11 @@ static void Command_Bootloader(void)
 	Bootloader_Execute();
 }
 
+static void Command_TurnOff(void)
+{
+	Blinker_Disable();
+}
+
 uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 {
 	// The command ID is always the first byte of the package.
@@ -78,6 +83,9 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 			break;
 		case CMD_Bootloader:
 			Command_Bootloader();
+			break;
+		case CMD_TurnOff:
+			Command_TurnOff();
 			break;
 		default:
 			return 1;

@@ -220,6 +220,13 @@ namespace BISS.Hardware.Blinky
 
 			return result;
 		}
+
+		public bool TurnOff()
+		{
+			checkMethodCall();
+
+			return sendReport(Command.TurnOff);
+		}
 		#endregion
 
 		#region IDisposable Support
