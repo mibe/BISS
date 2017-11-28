@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using HidLibrary;
 
 namespace BISS.Hardware.Blinky
@@ -27,6 +28,7 @@ namespace BISS.Hardware.Blinky
 		Random random;
 		bool disposed;
 		byte lastSyncByte;
+		readonly object lockObject;
 
 		private byte syncByte
 		{
@@ -65,7 +67,11 @@ namespace BISS.Hardware.Blinky
 
 		event EventHandler Removed;
 
-		public Device() => this.random = new Random();
+		public Device()
+		{
+			this.random = new Random();
+			this.lockObject = new object();
+		}
 
 		private void Device_Removed() => Removed?.Invoke(this, EventArgs.Empty);
 
@@ -74,7 +80,7 @@ namespace BISS.Hardware.Blinky
 			return HidDevices.Enumerate(UsbVendorId, UsbProductId).FirstOrDefault();
 		}
 
-		private void checkMethodCall(bool checkConnected = true)
+		private void isValidMethodCall(bool checkConnected = true)
 		{
 			if (this.disposed)
 				throw new ObjectDisposedException(GetType().FullName);
@@ -83,26 +89,48 @@ namespace BISS.Hardware.Blinky
 				throw new InvalidOperationException("Not connected to device.");
 		}
 
-		private bool sendReport(Command cmd, params byte[] args)
+		private bool sendReport(Command cmd, bool releaseLock, ref bool lockTaken, params byte[] args)
 		{
 			if (cmd == Command.None)
 				throw new ArgumentException();
 			if (args.Length > maxArgCount)
 				throw new ArgumentOutOfRangeException("args");
 
-			HidReport report = new HidReport(reportSize);
-			report.Data = new byte[reportSize];
-			report.Data[0] = (byte)cmd;
-			for (int a = 0; a < args.Length; a++)
-				report.Data[a + 1] = args[a];
-			report.Data[7] = syncByte;
+			bool result = false;
 
-			return this.hidDevice.WriteReport(report, (int)Timeout);
+			try
+			{
+				Monitor.Enter(this.lockObject, ref lockTaken);
+
+				HidReport report = new HidReport(reportSize);
+				report.Data = new byte[reportSize];
+				report.Data[0] = (byte)cmd;
+				for (int a = 0; a < args.Length; a++)
+					report.Data[a + 1] = args[a];
+				report.Data[7] = syncByte;
+
+				result = this.hidDevice.WriteReport(report, (int)Timeout);
+			}
+			finally
+			{
+				if (releaseLock && lockTaken)
+					Monitor.Exit(this.lockObject);
+			}
+
+			return result;
+		}
+
+		private bool sendReport(Command cmd, params byte[] args)
+		{
+			bool lockTaken = false;
+			return sendReport(cmd, true, ref lockTaken, args);
 		}
 
 		private byte[] sendAndReceiveReport(Command cmd, params byte[] args)
 		{
-			if (!sendReport(cmd, args))
+			bool lockTaken = false;
+
+			if (!sendReport(cmd, false, ref lockTaken, args))
 				return null;
 
 			HidReport receivedReport = new HidReport(reportSize);
@@ -111,6 +139,9 @@ namespace BISS.Hardware.Blinky
 			{
 				receivedReport = this.hidDevice.ReadReport((int)Timeout);
 			} while (receivedReport.Data[7] != lastSyncByte);
+
+			if (lockTaken)
+				Monitor.Exit(this.lockObject);
 
 			byte[] result = new byte[maxArgCount];
 			Array.Copy(receivedReport.Data, 1, result, 0, maxArgCount);
@@ -121,9 +152,9 @@ namespace BISS.Hardware.Blinky
 		#region Public methods
 		public bool Connect()
 		{
-			checkMethodCall(false);
+			isValidMethodCall(false);
 
-			if (this.hidDevice != null && this.hidDevice.IsConnected)
+			if (Connected)
 				throw new InvalidOperationException("Already connected to device.");
 
 			this.hidDevice = enumerate();
@@ -139,7 +170,7 @@ namespace BISS.Hardware.Blinky
 
 		public void Disconnect()
 		{
-			checkMethodCall(false);
+			isValidMethodCall(false);
 
 			if (this.hidDevice == null || !this.hidDevice.IsConnected)
 				return;
@@ -150,7 +181,7 @@ namespace BISS.Hardware.Blinky
 
 		public bool Trigger(TriggerFlags flags = DefaultTriggerFlags)
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			return sendReport(Command.Trigger, (byte)flags);
 		}
@@ -171,7 +202,7 @@ namespace BISS.Hardware.Blinky
 
 		public bool SetSettings(Settings settings)
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			byte[] args = new byte[5];
 			args[0] = settings.Color.R;
@@ -185,7 +216,7 @@ namespace BISS.Hardware.Blinky
 
 		public Settings GetSettings()
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			byte[] received = sendAndReceiveReport(Command.GetSettings);
 
@@ -194,21 +225,21 @@ namespace BISS.Hardware.Blinky
 
 		public bool SaveSettings()
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			return sendReport(Command.SaveSettings);
 		}
 
 		public bool ResetSettings()
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			return sendReport(Command.ResetSettings);
 		}
 
 		public bool Bootloader()
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			bool result = sendReport(Command.Bootloader);
 
@@ -223,7 +254,7 @@ namespace BISS.Hardware.Blinky
 
 		public bool TurnOff()
 		{
-			checkMethodCall();
+			isValidMethodCall();
 
 			return sendReport(Command.TurnOff);
 		}
