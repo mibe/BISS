@@ -41,7 +41,7 @@
     <Compile Include="Blinky\Command.cs" />
     <Compile Include="Blinky\Device.cs" />
     <Compile Include="Blinky\Settings.cs" />
-    <Compile Include="Blinky\TriggerFlags.cs" />
+    <Compile Include="Blinky\TriggerOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
