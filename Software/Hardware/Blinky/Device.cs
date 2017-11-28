@@ -96,7 +96,7 @@ namespace BISS.Hardware.Blinky
 		/// <summary>
 		/// Occurs after the device was removed from the USB bus.
 		/// </summary>
-		event EventHandler Removed;
+		public event EventHandler Removed;
 
 		/// <summary>
 		/// Initializes a new instance of the Device class.
@@ -107,7 +107,7 @@ namespace BISS.Hardware.Blinky
 			this.lockObject = new object();
 		}
 
-		private void Device_Removed() => Removed?.Invoke(this, EventArgs.Empty);
+		private void Device_Removed() => OnRemoved(EventArgs.Empty);
 
 		/// <summary>
 		/// Return an instance of a <see cref="HidDevice"/> prepared for communicating with the Blinky device.
@@ -225,6 +225,15 @@ namespace BISS.Hardware.Blinky
 			Array.Copy(receivedReport.Data, 1, result, 0, maxArgCount);
 
 			return result;
+		}
+
+		/// <summary>
+		/// Raises the <see cref="Removed"/> event.
+		/// </summary>
+		/// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
+		protected virtual void OnRemoved(EventArgs e)
+		{
+			Removed?.Invoke(this, e);
 		}
 
 		#region Public methods
@@ -365,7 +374,7 @@ namespace BISS.Hardware.Blinky
 
 		/// <summary>
 		/// Start the bootloader for uploading firmware updates. This also disconnects
-		/// this instance from the device. The <see cref="Removed"/> event is triggered.
+		/// this instance from the device. The <see cref="Removed"/> event is raised.
 		/// </summary>
 		/// <returns>TRUE on success.</returns>
 		public bool Bootloader()
@@ -377,7 +386,7 @@ namespace BISS.Hardware.Blinky
 			if (result)
 			{
 				Disconnect();
-				Device_Removed();
+				OnRemoved(EventArgs.Empty);
 			}
 
 			return result;
