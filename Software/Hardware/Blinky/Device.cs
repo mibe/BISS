@@ -188,7 +188,7 @@ namespace BISS.Hardware.Blinky
 
 		public bool Trigger(bool touchSensor, bool timeout, bool auxOutput)
 		{
-			TriggerFlags flags = 0;
+			TriggerFlags flags = TriggerFlags.None;
 
 			if (touchSensor)
 				flags |= TriggerFlags.TouchSensor;
