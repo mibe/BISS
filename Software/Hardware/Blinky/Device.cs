@@ -90,8 +90,7 @@ namespace BISS.Hardware.Blinky
 		/// <summary>
 		/// Gets or sets the timeout value in milliseconds until a command to the device fails.
 		/// </summary>
-		public UInt32 Timeout
-		{ get; set; }
+		public UInt32 Timeout { get; set; } = 100;
 
 		/// <summary>
 		/// Occurs after the device was removed from the USB bus.
@@ -107,8 +106,6 @@ namespace BISS.Hardware.Blinky
 			this.lockObject = new object();
 		}
 
-		private void Device_Removed() => OnRemoved(EventArgs.Empty);
-
 		/// <summary>
 		/// Return an instance of a <see cref="HidDevice"/> prepared for communicating with the Blinky device.
 		/// </summary>
@@ -117,6 +114,8 @@ namespace BISS.Hardware.Blinky
 		{
 			return HidDevices.Enumerate(UsbVendorId, UsbProductId).FirstOrDefault();
 		}
+
+		private void Device_Removed() => OnRemoved(EventArgs.Empty);
 
 		/// <summary>
 		/// Throws an exception if the current state if this instance is not suited for communicating with
