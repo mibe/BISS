@@ -255,6 +255,7 @@ namespace BISS.Hardware.Blinky
 				return false;
 
 			this.hidDevice.Removed += Device_Removed;
+			this.hidDevice.MonitorDeviceEvents = true;
 			this.hidDevice.OpenDevice();
 
 			return true;
@@ -376,7 +377,7 @@ namespace BISS.Hardware.Blinky
 		/// this instance from the device. The <see cref="Removed"/> event is raised.
 		/// </summary>
 		/// <returns>TRUE on success.</returns>
-		public bool Bootloader()
+		public bool StartBootloader()
 		{
 			isValidMethodCall();
 
