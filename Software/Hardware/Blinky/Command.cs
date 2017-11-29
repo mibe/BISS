@@ -36,6 +36,10 @@
 		/// <summary>
 		/// Turn off a triggered blink algorithm.
 		/// </summary>
-		TurnOff = 7
+		TurnOff = 7,
+		/// <summary>
+		/// Request a heartbeat signal from the device.
+		/// </summary>
+		Ping = 8
 	}
 }

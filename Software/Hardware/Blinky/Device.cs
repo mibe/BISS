@@ -402,6 +402,21 @@ namespace BISS.Hardware.Blinky
 
 			return sendReport(Command.TurnOff);
 		}
+
+		/// <summary>
+		/// Requests a heartbeat signal from the device.
+		/// </summary>
+		/// <returns>TRUE if the device is alive.</returns>
+		public bool Ping()
+		{
+			isValidMethodCall();
+
+			// "Pong" as response to Ping
+			byte[] pong = new byte[] { 0x50, 0x6F, 0x6E, 0x67, 0x00, 0x00 };
+			byte[] devicePong = sendAndReceiveReport(Command.Ping);
+
+			return devicePong != null && devicePong.SequenceEqual(pong);
+		}
 		#endregion
 
 		#region IDisposable Support

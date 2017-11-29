@@ -13,6 +13,7 @@
 #define CMD_ResetSettings 5
 #define CMD_Bootloader 6
 #define CMD_TurnOff 7
+#define CMD_Ping 8
 
 uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost);
 #endif

@@ -50,6 +50,14 @@ static void Command_TurnOff(void)
 	Blinker_Disable();
 }
 
+static void Command_Ping(uint8_t* p, uint8_t* o, uint8_t* n, uint8_t* g)
+{
+	*p = 0x50;		// P
+	*o = 0x6F;		// o
+	*n = 0x6E;		// n
+	*g = 0x67;		// g
+}
+
 uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 {
 	// The command ID is always the first byte of the package.
@@ -86,6 +94,9 @@ uint8_t Command_Handle(uint8_t* fromHost, uint8_t* toHost)
 			break;
 		case CMD_TurnOff:
 			Command_TurnOff();
+			break;
+		case CMD_Ping:
+			Command_Ping(&toHost[1], &toHost[2], &toHost[3], &toHost[4]);
 			break;
 		default:
 			return 1;
