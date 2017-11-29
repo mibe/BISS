@@ -83,7 +83,7 @@ namespace BISS.Hardware.Blinky
 		{
 			get
 			{
-				return this.hidDevice != null && this.hidDevice.IsConnected;
+				return this.hidDevice != null && this.hidDevice.IsOpen;
 			}
 		}
 
@@ -267,7 +267,7 @@ namespace BISS.Hardware.Blinky
 		{
 			isValidMethodCall(false);
 
-			if (this.hidDevice == null || !this.hidDevice.IsConnected)
+			if (!Connected)
 				return;
 
 			this.hidDevice.Removed -= Device_Removed;
