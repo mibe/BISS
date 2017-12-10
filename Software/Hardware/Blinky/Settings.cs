@@ -1,8 +1,10 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace BISS.Hardware.Blinky
 {
-	public class Settings
+	public class Settings : IEquatable<Settings>
 	{
 		/// <summary>
 		/// Gets or sets the color used by the blink algorithm.
@@ -49,5 +51,65 @@ namespace BISS.Hardware.Blinky
 		public Settings(byte r, byte g, byte b, byte blinkInterval, byte blinkTimeout)
 			: this(Color.FromArgb(r, g, b), blinkInterval, blinkTimeout)
 		{ }
+
+		/// <summary>
+		/// Determines whether the specified object is equal to the current instance.
+		/// </summary>
+		/// <param name="obj">The object to compare with the current instance.</param>
+		/// <returns>TRUE if the specified object is equal to the current object; otherwise, FALSE.</returns>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+				return false;
+
+			if (ReferenceEquals(this, obj))
+				return true;
+
+			return Equals(obj as Settings);
+		}
+
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <param name="other">An object to compare with this object.</param>
+		/// <returns>TRUE if the current object is equal to the <paramref name="other"/> parameter;
+		/// otherwise, FALSE.</returns>
+		public bool Equals(Settings other)
+		{
+			if (other == null)
+				return false;
+
+			return other.BlinkInterval == BlinkInterval &&
+				other.BlinkTimeout == BlinkTimeout &&
+				other.Color == Color;
+		}
+
+		public override int GetHashCode()
+		{
+			var hashCode = -1424713856;
+			hashCode = hashCode * -1521134295 + EqualityComparer<Color>.Default.GetHashCode(Color);
+			hashCode = hashCode * -1521134295 + BlinkInterval.GetHashCode();
+			hashCode = hashCode * -1521134295 + BlinkTimeout.GetHashCode();
+			return hashCode;
+		}
+
+		/// <summary>
+		/// Defines an implicit conversion of a Settings instance to a <see cref="Byte"/> array.
+		/// </summary>
+		/// <param name="instance">The Settings instance to convert.</param>
+		public static implicit operator byte[](Settings instance)
+		{
+			if (instance == null)
+				throw new ArgumentNullException("instance");
+
+			byte[] result = new byte[5];
+			result[0] = instance.Color.R;
+			result[1] = instance.Color.G;
+			result[2] = instance.Color.B;
+			result[3] = instance.BlinkInterval;
+			result[4] = instance.BlinkTimeout;
+
+			return result;
+		}
 	}
 }
