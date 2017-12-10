@@ -93,6 +93,37 @@ namespace BISS.Hardware.Blinky
 		public UInt32 Timeout { get; set; } = 100;
 
 		/// <summary>
+		/// Gets or sets the settings of the blink algorithm.
+		/// </summary>
+		/// <remarks>Returns NULL if the settings could not be determined. The settings are not saved to
+		/// the EEPROM by setting this property. Call the <see cref="SaveSettings"/> method to save the
+		/// settings.</remarks>
+		/// <exception cref="ArgumentNullException">The parameter <paramref name="value"/> was NULL.</exception>
+		public Settings Settings
+		{
+			get
+			{
+				isValidCall();
+
+				byte[] received = sendAndReceiveReport(Command.GetSettings);
+
+				if (received == null)
+					return null;
+
+				return new Settings(received[0], received[1], received[2], received[3], received[4]);
+			}
+			set
+			{
+				isValidCall();
+
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				sendReport(Command.SetSettings, value);
+			}
+		}
+
+		/// <summary>
 		/// Occurs after the device was removed from the USB bus.
 		/// </summary>
 		public event EventHandler Removed;
@@ -125,7 +156,7 @@ namespace BISS.Hardware.Blinky
 		/// connected to a device. Defaults to TRUE.</param>
 		/// <exception cref="ObjectDisposedException">Thrown when the object is already disposed.</exception>
 		/// <exception cref="InvalidOperationException">Thrown when this instance is not connected to a device.</exception>
-		private void isValidMethodCall(bool checkConnected = true)
+		private void isValidCall(bool checkConnected = true)
 		{
 			if (this.disposed)
 				throw new ObjectDisposedException(GetType().FullName);
@@ -230,10 +261,7 @@ namespace BISS.Hardware.Blinky
 		/// Raises the <see cref="Removed"/> event.
 		/// </summary>
 		/// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-		protected virtual void OnRemoved(EventArgs e)
-		{
-			Removed?.Invoke(this, e);
-		}
+		protected virtual void OnRemoved(EventArgs e) => Removed?.Invoke(this, e);
 
 		#region Public methods
 		/// <summary>
@@ -244,7 +272,7 @@ namespace BISS.Hardware.Blinky
 		/// <seealso cref="Connected"/>
 		public bool Connect()
 		{
-			isValidMethodCall(false);
+			isValidCall(false);
 
 			if (Connected)
 				throw new InvalidOperationException("Already connected to device.");
@@ -266,7 +294,7 @@ namespace BISS.Hardware.Blinky
 		/// </summary>
 		public void Disconnect()
 		{
-			isValidMethodCall(false);
+			isValidCall(false);
 
 			if (!Connected)
 				return;
@@ -282,7 +310,7 @@ namespace BISS.Hardware.Blinky
 		/// <returns>TRUE on success.</returns>
 		public bool Trigger(TriggerOptions flags = DefaultTriggerOptions)
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			return sendReport(Command.Trigger, (byte)flags);
 		}
@@ -309,52 +337,12 @@ namespace BISS.Hardware.Blinky
 		}
 
 		/// <summary>
-		/// Sets the settings of the blink algorithm.
-		/// </summary>
-		/// <remarks>The settings are not saved to the EEPROM by calling this method.
-		/// Call the <see cref="SaveSettings"/> method to save the settings.</remarks>
-		/// <param name="settings">Instance of the <see cref="Settings"/> class containing the settings
-		/// for the blink algorithm.</param>
-		/// <returns>TRUE on success.</returns>
-		/// <exception cref="ArgumentNullException">The parameter <paramref name="settings"/> was NULL.</exception>
-		public bool SetSettings(Settings settings)
-		{
-			isValidMethodCall();
-
-			if (settings == null)
-				throw new ArgumentNullException("settings");
-
-			byte[] args = new byte[5];
-			args[0] = settings.Color.R;
-			args[1] = settings.Color.G;
-			args[2] = settings.Color.B;
-			args[3] = settings.BlinkInterval;
-			args[4] = settings.BlinkTimeout;
-
-			return sendReport(Command.SetSettings, args);
-		}
-
-		/// <summary>
-		/// Gets the settings of the blink algorithm.
-		/// </summary>
-		/// <returns>Instance of the <see cref="Settings"/> class containing the settings
-		/// for the blink algorithm or NULL if the settings could not be determined.</returns>
-		public Settings GetSettings()
-		{
-			isValidMethodCall();
-
-			byte[] received = sendAndReceiveReport(Command.GetSettings);
-
-			return new Settings(received[0], received[1], received[3], received[4], received[5]);
-		}
-
-		/// <summary>
 		/// Saves the settings in the EEPROM of the device.
 		/// </summary>
 		/// <returns>TRUE on success.</returns>
 		public bool SaveSettings()
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			return sendReport(Command.SaveSettings);
 		}
@@ -367,7 +355,7 @@ namespace BISS.Hardware.Blinky
 		/// <returns>TRUE on success.</returns>
 		public bool ResetSettings()
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			return sendReport(Command.ResetSettings);
 		}
@@ -379,7 +367,7 @@ namespace BISS.Hardware.Blinky
 		/// <returns>TRUE on success.</returns>
 		public bool StartBootloader()
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			bool result = sendReport(Command.Bootloader);
 
@@ -398,7 +386,7 @@ namespace BISS.Hardware.Blinky
 		/// <returns>TRUE on success.</returns>
 		public bool TurnOff()
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			return sendReport(Command.TurnOff);
 		}
@@ -409,7 +397,7 @@ namespace BISS.Hardware.Blinky
 		/// <returns>TRUE if the device is alive.</returns>
 		public bool Ping()
 		{
-			isValidMethodCall();
+			isValidCall();
 
 			// "Pong" as response to Ping
 			byte[] pong = new byte[] { 0x50, 0x6F, 0x6E, 0x67, 0x00, 0x00 };
