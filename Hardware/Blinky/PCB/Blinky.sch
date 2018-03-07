@@ -8530,8 +8530,8 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <part name="C3" library="rcl" deviceset="C-EU" device="C0805" value="27p"/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="Y1" library="mibe" deviceset="ABM3" device=""/>
-<part name="R1" library="rcl" deviceset="R-EU_" device="R0805" value="22"/>
-<part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="22"/>
+<part name="R1" library="rcl" deviceset="R-EU_" device="R0805" value="16"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="16"/>
 <part name="X1" library="mibe" deviceset="USB-A-PCB" device=""/>
 <part name="X2" library="mibe" deviceset="USB-A-PCB" device=""/>
 <part name="D1" library="diode" deviceset="DIODE-" device="SOD123" value="1N5819HW"/>

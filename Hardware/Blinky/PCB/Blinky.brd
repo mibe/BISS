@@ -1580,8 +1580,8 @@ Covered vias can be set in Masks (Limit).
 <element name="C2" library="rcl" package="C0805" value="27p" x="51.25" y="10.5"/>
 <element name="C3" library="rcl" package="C0805" value="27p" x="51.25" y="1.5"/>
 <element name="Y1" library="mibe" package="ABM3" value="ABM3" x="51.25" y="6" rot="R90"/>
-<element name="R1" library="rcl" package="R0805" value="22" x="55.25" y="7.25" rot="R180"/>
-<element name="R2" library="rcl" package="R0805" value="22" x="55.25" y="4.75" rot="R180"/>
+<element name="R1" library="rcl" package="R0805" value="16" x="55.25" y="7.25" rot="R180"/>
+<element name="R2" library="rcl" package="R0805" value="16" x="55.25" y="4.75" rot="R180"/>
 <element name="X1" library="mibe" package="USB-A-PCB" value="USB-A-PCB" x="63.6" y="6" rot="MR0"/>
 <element name="X2" library="mibe" package="USB-A-PCB" value="USB-A-PCB" x="63.6" y="6" rot="R180"/>
 <element name="D1" library="diode" package="SOD123" value="1N5819HW" x="60" y="1.5"/>
