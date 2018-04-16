@@ -879,6 +879,7 @@
 <symbols>
 <symbol name="LOGO">
 <pin name="P$1" x="0" y="0" visible="off" length="middle" direction="pas"/>
+<text x="7.62" y="-0.635" size="1.778" layer="97">BISS-Logo</text>
 </symbol>
 </symbols>
 <devicesets>
