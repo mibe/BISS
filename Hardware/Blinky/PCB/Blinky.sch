@@ -8489,7 +8489,7 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <library name="BISS">
 <packages>
 <package name="LOGO">
-<smd name="P$1" x="15.2788375" y="-5.7" dx="30.557675" dy="11.4" layer="1" stop="no"/>
+<smd name="P$1" x="15.2788375" y="-5.7" dx="30.557675" dy="11.4" layer="1" stop="no" cream="no"/>
 <polygon width="0.0005" layer="21">
 <vertex x="11.24484375" y="-10.41365"/>
 <vertex x="11.161178125" y="-10.384603125"/>
