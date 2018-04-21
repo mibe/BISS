@@ -14,8 +14,8 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
@@ -36,15 +36,15 @@
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
-<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
@@ -63,6 +63,12 @@
 <wire x1="0" y1="12" x2="0" y2="0" width="0" layer="20"/>
 <wire x1="0" y1="11.7" x2="63.125" y2="11.7" width="0.05" layer="51"/>
 <wire x1="0" y1="0.3" x2="63.125" y2="0.3" width="0.05" layer="51"/>
+<rectangle x1="31" y1="9.5" x2="31.375" y2="12" layer="41"/>
+<rectangle x1="31" y1="0" x2="31.375" y2="1.25" layer="41"/>
+<rectangle x1="31" y1="0" x2="31.375" y2="1.25" layer="42"/>
+<rectangle x1="31" y1="1.75" x2="31.375" y2="2.875" layer="42"/>
+<rectangle x1="31" y1="9.125" x2="31.375" y2="12" layer="42"/>
+<rectangle x1="31" y1="1.75" x2="31.375" y2="2.875" layer="41"/>
 </plain>
 <libraries>
 <library name="mibe">
@@ -2212,84 +2218,110 @@ Based on the following sources:
 <class number="0" name="default" width="0" drill="0">
 </class>
 </classes>
-<designrules name="PCB-POOL Standard">
-<description language="de">&lt;b&gt;EAGLE Design Rules Prototypen  für PCB-POOL(R)&lt;/b&gt;
+<designrules name="Multi-CB_2L_100µm-Tracks_OL35µm">
+<description language="de">&lt;b&gt;Multi-CB EAGLE Design Rules für 2 Lagen Standard (ohne Aufpreis)&lt;/b&gt;
+&lt;br&gt;
+100µm Leiter, 0.2mm Drill, ca. 35µm End-Kupfer (18µm Startkupfer)
 &lt;p&gt;
-Wir haben in diesem DRU File alle notwendigen Design Einstellungen vorgenommen, damit Sie Ihre Leiterplatte 
-gemaess unseren Mindestanforderungen im Standard bestellen koennen. Die Optionen Shapes und Misc sind dabei nicht relevant.
-Der minimale und maximale Wert für Roundness Shapes kann frei gewählt werden.
-Bitte beachten Sie, daß die Mindesteinstellungen nicht geaendert werden, da ansonsten keine Gewaehrleistung für eine 
-fehlerfreie Produktion übernommen werden kann.&lt;br&gt;
-Abzudeckende Vias koennen in Masks (unter Limit) eingestellt werden.
-&lt;/p&gt;Ihr Beta LAYOUT Team
-&lt;p&gt;&lt;p&gt;
-&lt;b&gt;EAGLE Design Rules Prototypes to use with PCB-POOL(R)&lt;/b&gt;
+&lt;b&gt;Bitte beachten:&lt;/b&gt;
+&lt;ul type=&quot;square&quot;&gt;
+	&lt;li&gt;Vias kleiner/gleich 0.45mm werden mit Lötstopp abgedeckt. Eine Freistellung der Vias kann unter Masks/Limit gesetzt werden.&lt;/li&gt;
+	&lt;li&gt;Bitte nur Vektorschrift verwenden! Im Control-Panel unter Optionen/Benutzeroberfläche: Immer Vektor-Schrift.&lt;/li&gt;
+	&lt;li&gt;Langlöcher im Layer 46 werden als durchkontaktierte Schlitze (DK) gefertigt, falls von Kupfer umgeben. NDK-Langlöcher müssen im Layer 20 definiert sein.&lt;/li&gt;
+	&lt;li&gt;Dieses .dru-File ist für Boards mit Fräskontur. Geritzte Kontur erfordert Distance/Copper/Dimension: 0.5mm.&lt;/li&gt;
+	&lt;li&gt;Falls Lötstopp-Brücken im gleichen Netz erwünscht: Clearance/Same Signals anpassen (empfohlen: 8mil)&lt;/li&gt;
+	&lt;li&gt;Supply/ Generate thermals ist standardmäßig aktiviert; kann auch deaktiviert werden.&lt;/li&gt;
+	&lt;li&gt;Zum Reduzieren der Pad-Größe für SMD-Schablonen kann Masks/Cream angepasst werden.&lt;/li&gt;
+&lt;/ul&gt;
+Für kleinere Werte (Leiterbahn, Drill) verwenden Sie bitte ein Advanced .dru-File von Multi-CB.&lt;br&gt;
+Weitere Hinweise finden Sie unter &lt;b&gt;Design-Hilfe&lt;/b&gt; auf unserer Webseite &lt;a href=&quot;http://www.multi-circuit-boards.eu/leiterplatten-design-hilfe/einfuehrung.html&quot;&gt;www.multi-cb.de&lt;/a&gt;.
+&lt;/p&gt;
 &lt;p&gt;
-The design rules in this DRU file have been set to cover our minimum standard requirements, the options Shapes and  Misc are not
-relevant. Values for Roundness (Shapes) can be chosen freely. Please do not change these minimum
-requirements to avoid problems during production.&lt;br&gt;
-Covered vias can be set in Masks (Limit).
-
-&lt;/p&gt;Your Beta LAYOUT Team</description>
+Ihr Multi-CB Team
+&lt;br&gt;&lt;br&gt;
+&lt;em&gt;Alle Angaben ohne Gewähr! Eine perfekte Einstellung der Design-Rules kann verständlicherweise nur durch den Anwender erfolgen.&lt;/em&gt;
+&lt;/p&gt;</description>
+<description language="en">&lt;b&gt;Multi-CB EAGLE Design Rules for 2 layers standard (w/o surcharge)&lt;/b&gt;
+&lt;br&gt;
+100µm tracks, 0.2mm drills, ca. 35µm final copper (18µm start copper)
+&lt;p&gt;
+&lt;b&gt;Please note:&lt;/b&gt;
+&lt;ul type=&quot;square&quot;&gt;
+	&lt;li&gt;Vias less/equal 0.45mm will be covered with solder mask. An exemption of the vias can be placed under Masks / Limit.&lt;/li&gt;
+	&lt;li&gt;Please only use vector fonts! In Control Panel under Options / User Interface: Always vector font.&lt;/li&gt;
+	&lt;li&gt;Oblong holes in the layer 46 are manufactured as plated-through slots (PTH), if surrounded by copper. NPTH-slots must be defined in the layer 20.&lt;/li&gt;
+	&lt;li&gt;This .dru-File is for boards with milling contour. V-scoring contour requires Distance / Copper / Dimension: 0.5mm.&lt;/li&gt;
+	&lt;li&gt;If solder-stop bridges on the same network are desired: Adjust Clearance / Same signal (recommended 8mil)&lt;/li&gt;
+	&lt;li&gt;Supply / Generate thermals is enabled by default; can also be deactivated.&lt;/li&gt;
+	&lt;li&gt;To reduce the pad size for SMD-Stencils: Masks/Cream can be customized.&lt;/li&gt;
+&lt;/ul&gt;
+For smaller values (conductors, drill) please use an Advanced .dru file of Multi-CB.&lt;br&gt;
+For more information, see &lt;b&gt;Design-Aid&lt;/b&gt; on our website &lt;a href=&quot;http://www.multi-circuit-boards.eu/en/pcb-design-aid/introduction.html&quot;&gt;www.multi-cb.eu&lt;/a&gt;.
+&lt;/p&gt;
+&lt;p&gt;
+Your Multi-CB Team
+&lt;br&gt;&lt;br&gt;
+&lt;em&gt;All statements without guarantee! A perfect setting of design rules can understandably only be performed by the user.&lt;/em&gt;
+&lt;/p&gt;</description>
 <param name="layerSetup" value="(1*16)"/>
-<param name="mtCopper" value="0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm"/>
-<param name="mtIsolate" value="1.5mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm"/>
-<param name="mdWireWire" value="0.15mm"/>
-<param name="mdWirePad" value="0.15mm"/>
-<param name="mdWireVia" value="0.15mm"/>
-<param name="mdPadPad" value="0.15mm"/>
-<param name="mdPadVia" value="0.15mm"/>
-<param name="mdViaVia" value="0.15mm"/>
-<param name="mdSmdPad" value="0.15mm"/>
-<param name="mdSmdVia" value="0.15mm"/>
-<param name="mdSmdSmd" value="0.15mm"/>
+<param name="mtCopper" value="0.018mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.035mm 0.018mm"/>
+<param name="mtIsolate" value="1.55mm 0.71mm 0.36mm 0.2mm 0.2mm 0.2mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm 0.15mm 0.2mm"/>
+<param name="mdWireWire" value="0.1mm"/>
+<param name="mdWirePad" value="0.1mm"/>
+<param name="mdWireVia" value="0.1mm"/>
+<param name="mdPadPad" value="0.1mm"/>
+<param name="mdPadVia" value="0.1mm"/>
+<param name="mdViaVia" value="0.1mm"/>
+<param name="mdSmdPad" value="0mil"/>
+<param name="mdSmdVia" value="0mil"/>
+<param name="mdSmdSmd" value="0mil"/>
 <param name="mdViaViaSameLayer" value="0.2mm"/>
 <param name="mnLayersViaInSmd" value="2"/>
-<param name="mdCopperDimension" value="0.3mm"/>
+<param name="mdCopperDimension" value="0.2mm"/>
 <param name="mdDrill" value="0.2mm"/>
 <param name="mdSmdStop" value="0mil"/>
-<param name="msWidth" value="0.15mm"/>
-<param name="msDrill" value="0.3mm"/>
-<param name="msMicroVia" value="25mm"/>
-<param name="msBlindViaRatio" value="0.5"/>
-<param name="rvPadTop" value="0"/>
-<param name="rvPadInner" value="0"/>
-<param name="rvPadBottom" value="0"/>
-<param name="rvViaOuter" value="0.4"/>
-<param name="rvViaInner" value="0.4"/>
-<param name="rvMicroViaOuter" value="0"/>
-<param name="rvMicroViaInner" value="0"/>
-<param name="rlMinPadTop" value="0.2mm"/>
-<param name="rlMaxPadTop" value="2.5mm"/>
-<param name="rlMinPadInner" value="0.2mm"/>
-<param name="rlMaxPadInner" value="2.5mm"/>
-<param name="rlMinPadBottom" value="0.2mm"/>
-<param name="rlMaxPadBottom" value="2.5mm"/>
-<param name="rlMinViaOuter" value="0.15mm"/>
-<param name="rlMaxViaOuter" value="2.5mm"/>
-<param name="rlMinViaInner" value="0.15mm"/>
-<param name="rlMaxViaInner" value="2.5mm"/>
-<param name="rlMinMicroViaOuter" value="2.5mm"/>
-<param name="rlMaxMicroViaOuter" value="25mm"/>
-<param name="rlMinMicroViaInner" value="2.5mm"/>
-<param name="rlMaxMicroViaInner" value="25mm"/>
+<param name="msWidth" value="0.1mm"/>
+<param name="msDrill" value="0.2mm"/>
+<param name="msMicroVia" value="0.2mm"/>
+<param name="msBlindViaRatio" value="1"/>
+<param name="rvPadTop" value="0.25"/>
+<param name="rvPadInner" value="0.25"/>
+<param name="rvPadBottom" value="0.25"/>
+<param name="rvViaOuter" value="0.25"/>
+<param name="rvViaInner" value="0.25"/>
+<param name="rvMicroViaOuter" value="0.25"/>
+<param name="rvMicroViaInner" value="0.25"/>
+<param name="rlMinPadTop" value="0.125mm"/>
+<param name="rlMaxPadTop" value="0.75mm"/>
+<param name="rlMinPadInner" value="0.125mm"/>
+<param name="rlMaxPadInner" value="0.75mm"/>
+<param name="rlMinPadBottom" value="0.125mm"/>
+<param name="rlMaxPadBottom" value="0.75mm"/>
+<param name="rlMinViaOuter" value="0.1mm"/>
+<param name="rlMaxViaOuter" value="0.75mm"/>
+<param name="rlMinViaInner" value="0.1mm"/>
+<param name="rlMaxViaInner" value="0.75mm"/>
+<param name="rlMinMicroViaOuter" value="0.1mm"/>
+<param name="rlMaxMicroViaOuter" value="0.75mm"/>
+<param name="rlMinMicroViaInner" value="0.1mm"/>
+<param name="rlMaxMicroViaInner" value="0.75mm"/>
 <param name="psTop" value="-1"/>
 <param name="psBottom" value="-1"/>
 <param name="psFirst" value="-1"/>
 <param name="psElongationLong" value="100"/>
 <param name="psElongationOffset" value="100"/>
-<param name="mvStopFrame" value="0"/>
+<param name="mvStopFrame" value="1"/>
 <param name="mvCreamFrame" value="0"/>
-<param name="mlMinStopFrame" value="0.075mm"/>
-<param name="mlMaxStopFrame" value="0.2mm"/>
+<param name="mlMinStopFrame" value="2mil"/>
+<param name="mlMaxStopFrame" value="2mil"/>
 <param name="mlMinCreamFrame" value="0mil"/>
-<param name="mlMaxCreamFrame" value="0.2mm"/>
-<param name="mlViaStopLimit" value="0mil"/>
+<param name="mlMaxCreamFrame" value="0mil"/>
+<param name="mlViaStopLimit" value="0.45mm"/>
 <param name="srRoundness" value="0"/>
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
 <param name="slThermalIsolate" value="0.2mm"/>
-<param name="slThermalsForVias" value="0"/>
+<param name="slThermalsForVias" value="1"/>
 <param name="dpMaxLengthDifference" value="10mm"/>
 <param name="dpGapFactor" value="2.5"/>
 <param name="checkGrid" value="0"/>
@@ -2525,6 +2557,19 @@ Covered vias can be set in Masks (Limit).
 <wire x1="39.875" y1="11" x2="38" y2="11" width="0.3" layer="1"/>
 <wire x1="39.1" y1="1.8" x2="40.825" y2="1.8" width="0.5" layer="16"/>
 <wire x1="40.825" y1="1.8" x2="41.125" y2="1.5" width="0.5" layer="16"/>
+<polygon width="0.4064" layer="1">
+<vertex x="0" y="0"/>
+<vertex x="70.375" y="0"/>
+<vertex x="70.375" y="12"/>
+<vertex x="0" y="12"/>
+</polygon>
+<polygon width="0.4064" layer="16">
+<vertex x="0" y="0"/>
+<vertex x="70.375" y="0"/>
+<vertex x="70.375" y="12"/>
+<vertex x="0" y="12"/>
+</polygon>
+<via x="35.625" y="2.125" extent="1-16" drill="0.3" diameter="0.6"/>
 </signal>
 <signal name="UCAP">
 <contactref element="C1" pad="1"/>
@@ -2540,10 +2585,10 @@ Covered vias can be set in Masks (Limit).
 <contactref element="U1" pad="1"/>
 <contactref element="Y1" pad="2"/>
 <contactref element="C2" pad="1"/>
-<wire x1="49.375" y1="8.05" x2="49.375" y2="6" width="0.3" layer="1"/>
-<via x="49.375" y="6" extent="1-16" drill="0.3"/>
-<wire x1="49.375" y1="6" x2="51.3348" y2="6" width="0.3" layer="16"/>
-<wire x1="51.3348" y1="6" x2="52.390228125" y2="4.944571875" width="0.3" layer="16"/>
+<wire x1="49.375" y1="8.05" x2="49.375" y2="6.125" width="0.3" layer="1"/>
+<via x="49.375" y="6.125" extent="1-16" drill="0.3"/>
+<wire x1="49.375" y1="6.125" x2="51.2098" y2="6.125" width="0.3" layer="16"/>
+<wire x1="51.2098" y1="6.125" x2="52.390228125" y2="4.944571875" width="0.3" layer="16"/>
 <wire x1="48.425" y1="10.5" x2="49.375" y2="9.55" width="0.3" layer="1"/>
 <wire x1="49.375" y1="9.55" x2="49.375" y2="8.05" width="0.3" layer="1"/>
 </signal>
@@ -2757,10 +2802,8 @@ Covered vias can be set in Masks (Limit).
 <wire x1="52.390228125" y1="7.055425" x2="51.824540625" y2="7.6211125" width="0.5" layer="16"/>
 <wire x1="54.875" y1="7.875" x2="53.209803125" y2="7.875" width="0.5" layer="16"/>
 <wire x1="53.209803125" y1="7.875" x2="52.390228125" y2="7.055425" width="0.5" layer="16"/>
-<wire x1="51.824540625" y1="7.6211125" x2="50.953428125" y2="6.75" width="0.5" layer="16"/>
-<wire x1="50.953428125" y1="6.75" x2="50.375" y2="6.75" width="0.5" layer="16"/>
-<wire x1="50.375" y1="6.75" x2="50.125" y2="7" width="0.5" layer="16"/>
-<wire x1="50.125" y1="7" x2="47.375" y2="7" width="0.5" layer="16"/>
+<wire x1="51.824540625" y1="7.6211125" x2="51.203428125" y2="7" width="0.5" layer="16"/>
+<wire x1="51.203428125" y1="7" x2="47.375" y2="7" width="0.5" layer="16"/>
 <wire x1="50.693171875" y1="3.247515625" x2="51.4406875" y2="2.5" width="0.5" layer="16"/>
 <wire x1="51.4406875" y1="2.5" x2="53.25" y2="2.5" width="0.5" layer="16"/>
 <wire x1="53.25" y1="2.5" x2="53.375" y2="2.625" width="0.5" layer="16"/>
@@ -2785,13 +2828,13 @@ Covered vias can be set in Masks (Limit).
 <wire x1="31.925" y1="3.75" x2="31.925" y2="6" width="0.5" layer="16"/>
 <wire x1="45.375" y1="7.55" x2="46.325" y2="8.5" width="0.5" layer="1"/>
 <wire x1="46.325" y1="8.5" x2="46.325" y2="8.625" width="0.5" layer="1"/>
-<via x="32" y="10" extent="1-16" drill="0.3"/>
+<via x="32.25" y="10.25" extent="1-16" drill="0.3"/>
 <wire x1="42.375" y1="8.675" x2="42.325" y2="8.625" width="0.5" layer="1"/>
 <wire x1="42.325" y1="8.625" x2="41.25" y2="8.625" width="0.5" layer="1"/>
-<wire x1="41.25" y1="8.625" x2="39.875" y2="10" width="0.5" layer="1"/>
-<wire x1="39.875" y1="10" x2="32" y2="10" width="0.5" layer="1"/>
+<wire x1="41.25" y1="8.625" x2="39.625" y2="10.25" width="0.5" layer="1"/>
+<wire x1="39.625" y1="10.25" x2="32.25" y2="10.25" width="0.5" layer="1"/>
 <wire x1="31.925" y1="8.25" x2="31.925" y2="9.925" width="0.5" layer="16"/>
-<wire x1="31.925" y1="9.925" x2="32" y2="10" width="0.5" layer="16"/>
+<wire x1="31.925" y1="9.925" x2="32.25" y2="10.25" width="0.5" layer="16"/>
 </signal>
 <signal name="VUSB1">
 <contactref element="D1" pad="A"/>
@@ -2868,6 +2911,17 @@ Covered vias can be set in Masks (Limit).
 <wire x1="20.1538375" y1="1.5" x2="31.75" y2="1.5" width="0.3" layer="16"/>
 </signal>
 </signals>
+<errors>
+<approved hash="6,1,1f24fa24037f125c"/>
+<approved hash="6,1,11a4ce1038ab137c"/>
+<approved hash="6,1,da0ad4d85572aa7d"/>
+<approved hash="6,1,fcf8d22055ba88af"/>
+<approved hash="6,16,1f24fa24037f125c"/>
+<approved hash="6,16,fcf8d22055ba88af"/>
+<approved hash="6,16,11a4ce1038ab137c"/>
+<approved hash="6,16,dc57b342dc3aa0c9"/>
+<approved hash="6,16,da0ad4d85572aa7d"/>
+</errors>
 </board>
 </drawing>
 </eagle>
