@@ -23,7 +23,7 @@ BL_SEC_SIZE  = 0x1000
 OPTIMIZATION = s
 TARGET       = Blinky
 SRC          = $(TARGET).c Bootloader.c Commands.c Blinker.c Settings.c Display.c Descriptors.c $(LUFA_SRC_USB)
-LUFA_PATH    = ../LUFA/LUFA
+LUFA_PATH    = LUFA/LUFA
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/ -DFLASH_SIZE_BYTES=$(FLASH_SIZE) -DBOOTLOADER_SEC_SIZE_BYTES=$(BL_SEC_SIZE)
 LD_FLAGS     =
 
