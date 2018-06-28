@@ -1,3 +1,11 @@
+/*
+ * BISS.Blinky: A USB device for notifying the user of a new BISS message.
+ *
+ * Copyright (C) 2017-2018 Michael Bemmerl
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "Bootloader.h"
 
 /*

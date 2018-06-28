@@ -1,4 +1,14 @@
 /*
+ * BISS.Blinky: A USB device for notifying the user of a new BISS message.
+ *
+ * Copyright (C) 2017 Michael Bemmerl
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * LUFA framework used as base.
+ */
+
+/*
              LUFA Library
      Copyright (C) Dean Camera, 2015.
 

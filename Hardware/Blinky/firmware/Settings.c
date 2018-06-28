@@ -1,3 +1,11 @@
+/*
+ * BISS.Blinky: A USB device for notifying the user of a new BISS message.
+ *
+ * Copyright (C) 2017-2018 Michael Bemmerl
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include "Settings.h"
 
 static Settings_t EEMEM s_settings = {0, SETTINGS_HEADER, SETTINGS_VERSION, {0, 0, 0}, 0, 0};
